@@ -75,7 +75,7 @@ class ChannelWiseTensorProduct(torch.nn.Module):
         math_dtype: Optional[str | torch.dtype] = None,
         use_fallback: Optional[bool] = None,
         method: Optional[str] = None,
-        use_fasteq: bool = False,
+        use_fasteq: bool = True,
     ):
         super().__init__()
         irreps_in1, irreps_in2 = default_irreps(irreps_in1, irreps_in2)
@@ -175,11 +175,11 @@ class ChannelWiseTensorProduct(torch.nn.Module):
         #print(f"fasteq init cwtp method:{self.method}, u1d_compatible:{u1d_compatible}")
         self.use_fasteq = use_fasteq
         if use_fasteq:
-            self.ff = cuet.FastEqSegmentedPolynomial(
+            self.ff = cuet.SegmentedPolynomial(
                 e.polynomial,
                 method=self.method,
                 math_dtype=math_dtype,
-                use_fasteq=use_fasteq,
+                use_fasteq=True,
                 op_name="cwtp", # channel-wise tensor product
                 u1d_compatible=u1d_compatible,
             ).to(device)

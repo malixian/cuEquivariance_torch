@@ -27,7 +27,6 @@ from .primitives.transpose import TransposeSegments, TransposeIrrepsLayout
 
 from .primitives.equivariant_tensor_product import EquivariantTensorProduct
 from .primitives.segmented_polynomial import SegmentedPolynomial
-from .primitives.fasteq_segmented_polynomial import FastEqSegmentedPolynomial
 from .operations.tp_channel_wise import ChannelWiseTensorProduct
 from .operations.tp_fully_connected import FullyConnectedTensorProduct
 from .operations.linear import Linear
@@ -83,7 +82,6 @@ __all__ = [
     "TransposeIrrepsLayout",
     "EquivariantTensorProduct",
     "SegmentedPolynomial",
-    "FastEqSegmentedPolynomial",
     "ChannelWiseTensorProduct",
     "FullyConnectedTensorProduct",
     "Linear",

@@ -69,7 +69,7 @@ class Linear(torch.nn.Module):
         math_dtype: Optional[str | torch.dtype] = None,
         use_fallback: Optional[bool] = None,
         method: Optional[str] = None,
-        use_fasteq: bool = False,
+        use_fasteq: bool = True,
     ):
         super().__init__()
         irreps_in, irreps_out = default_irreps(irreps_in, irreps_out)
@@ -145,11 +145,11 @@ class Linear(torch.nn.Module):
 
         self.use_fasteq = use_fasteq
         if use_fasteq:
-            self.ff = cuet.FastEqSegmentedPolynomial(
+            self.ff = cuet.SegmentedPolynomial(
                 e.polynomial,
                 method=self.method,
                 math_dtype=math_dtype,
-                use_fasteq=use_fasteq,
+                use_fasteq=True,
                 op_name="equi_linear", # equivariant linear
             ).to(device)
 
