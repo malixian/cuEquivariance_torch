@@ -44,7 +44,7 @@ except ImportError:
 import time
 #from mace.tools.scatter import scatter_sum
 
-from fasteq.ops.equi_linear import fast_equi_linear
+from fasteq.ops.so3_linear import fast_equi_linear
 from fasteq.ops.fctp import fast_fctp
 from fasteq.ops.uniform1d_jit import fast_uniform1d_jit
 from fasteq.ops.stc import fast_stc_uniform1d_jit
