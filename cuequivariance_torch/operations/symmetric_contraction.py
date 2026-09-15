@@ -221,7 +221,7 @@ class SymmetricContraction(torch.nn.Module):
         )
         
         if self.use_fasteq:
-            self.ff = cuet.FastEqSegmentedPolynomial(
+            self.ff = cuet.SegmentedPolynomial(
                 self.etp.polynomial,
                 method=self.method,
                 math_dtype=math_dtype,

@@ -156,11 +156,11 @@ class FullyConnectedTensorProduct(torch.nn.Module):
         
         self.use_fasteq = use_fasteq
         if use_fasteq:
-            self.ff = cuet.FastEqSegmentedPolynomial(
+            self.ff = cuet.SegmentedPolynomial(
                 e.polynomial,
                 method=self.method,
                 math_dtype=math_dtype,
-                use_fasteq=use_fasteq,
+                use_fasteq=True,
                 op_name="fctp", # fully connected tensor product
             ).to(device)
 
