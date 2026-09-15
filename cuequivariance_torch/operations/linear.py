@@ -69,7 +69,7 @@ class Linear(torch.nn.Module):
         math_dtype: Optional[str | torch.dtype] = None,
         use_fallback: Optional[bool] = None,
         method: Optional[str] = None,
-        use_fasteq: bool = True,
+        use_fasteq: bool = False,
     ):
         super().__init__()
         irreps_in, irreps_out = default_irreps(irreps_in, irreps_out)
@@ -199,26 +199,26 @@ class Linear(torch.nn.Module):
 
         if weight is None:
             raise ValueError("Weights should not be None")
-
+        
         if self.use_fasteq:
-            #torch.cuda.synchronize()
-            #start_time = time.perf_counter() * 1000
+            torch.cuda.synchronize()
+            start_time = time.perf_counter() * 1000
 
             output = self.ff([weight, self.transpose_in(x)], input_indices=input_indices)
             
-            #torch.cuda.synchronize()
-            #end_time = time.perf_counter() * 1000
-            #execution_time_ms = end_time - start_time
-            #print(f"<< fasteq equi-linear forward cost: {execution_time_ms:.3f} ms >>")
+            torch.cuda.synchronize()
+            end_time = time.perf_counter() * 1000
+            execution_time_ms = end_time - start_time
+            print(f"<< fasteq equi-linear forward cost: {execution_time_ms:.3f} ms >>")
         else:
-            """ torch.cuda.synchronize()
-            start_time = time.perf_counter() * 1000 """
+            torch.cuda.synchronize()
+            start_time = time.perf_counter() * 1000
 
             output = self.f([weight, self.transpose_in(x)], input_indices=input_indices)
 
-            """ torch.cuda.synchronize()
+            torch.cuda.synchronize()
             end_time = time.perf_counter() * 1000
             execution_time_ms = end_time - start_time
             print(f"<< cueq equi-linear forward cost: {execution_time_ms:.3f} ms >>")
- """
+
         return self.transpose_out(output[0])

@@ -852,45 +852,14 @@ class SegmentedPolynomial(nn.Module):
                     return self.fallback(
                         inputs, input_indices, output_shapes, output_indices
                     )
-
+        out = [torch.empty(0) for _ in range(self.num_outputs)]
         if self.use_fasteq:
-            out = [torch.empty(0) for _ in range(self.num_outputs)]
-            if self.num_outputs != 1:
+            if self.op_name == "equi_linear":
+                if self.num_outputs != 1:
                     raise ValueError("equi_linear should have exactly one output")
-            
-            if False:
-            #if self.op_name == "equi_linear":
-                '''
-                if tuple(inputs[0].shape) == (1, 36864) or tuple(inputs[0].shape) == (1, 163840) or tuple(inputs[0].shape) == (1, 852992):
-                        torch.cuda.synchronize()
-                        start_time = time.perf_counter() * 1000
-
-                        ref = fast_equi_linear(self.descriptor, inputs[0], inputs[1])
-
-                        torch.cuda.synchronize()
-                        end_time = time.perf_counter() * 1000
-                        execution_time_ms = end_time - start_time
-                        print(f" fasteq equi-linear forward cost: {execution_time_ms:.3f} ms ")
-
-                        torch.cuda.synchronize()
-                        start_time = time.perf_counter() * 1000
-
-                        out = self.m(inputs, input_indices, output_shapes, output_indices)
-                        
-                        torch.cuda.synchronize()
-                        end_time = time.perf_counter() * 1000
-                        execution_time_ms = end_time - start_time
-                        print(f"cueq equi-linear forward cost: {execution_time_ms:.3f} ms")
-                        print(f"eq-linear input0 shape: {inputs[0].shape}, input1 shape: {inputs[1].shape}")
-                        print(f"eq-linear out shape:{out[0].shape}")
-                '''
-                if tuple(inputs[0].shape) == (1, 36864) or tuple(inputs[0].shape) == (1, 163840) or tuple(inputs[0].shape) == (1, 852992):
-                    ref = fast_equi_linear(self.descriptor, inputs[0], inputs[1])
-                    out[0] = ref
-                else:
-                    out = self.m(inputs, input_indices, output_shapes, output_indices)
-
-                    return out
+                ref = fast_equi_linear(self.descriptor, inputs[0], inputs[1])
+                out[0] = ref
+                #out = self.m(inputs, input_indices, output_shapes, output_indices)
             elif self.op_name == "stc":
                 i0 = input_indices[0].to(torch.int32)
                 x0 = inputs[0]
